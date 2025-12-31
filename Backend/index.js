@@ -30,7 +30,7 @@ app.use(
 
 app.use("/api/user", userRouter);
 app.use("/api/company", companyRouter);
-app.use("/api/jobs", jobRouter);
+app.use("/api/job", jobRouter);
 app.use("/api/application", applicationRouter);
 
 const PORT = process.env.PORT || 5001;
