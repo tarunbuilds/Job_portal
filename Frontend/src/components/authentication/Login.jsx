@@ -46,7 +46,7 @@ const Login = () => {
       const errorMessage = error.response
         ? error.response.data.message
         : "An unexpected error occurred.";
-      toast.error(errorMessage);
+      toast.error("Login failed:",errorMessage);
     } finally {
       dispatch(setLoading(false));
     }

@@ -114,7 +114,10 @@ export const getJobById = async (req, res) => {
 export const getAdminJobs = async (req, res) => {
   try {
     const adminId = req.userId;
-    const jobs = await Job.find({ created_by: adminId });
+    const jobs = await Job.find({ created_by: adminId }).populate({
+      path: "company",
+      sort: { createdAt: -1 },
+    });
     if (!jobs || jobs.length === 0) {
       return res.status(404).json({ message: "No jobs found for this admin", success: false });
     }

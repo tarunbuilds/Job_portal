@@ -4,7 +4,9 @@ const jobSlice = createSlice({
   name: "job",
   initialState: {
     allJobs: [],
+    allAdminJobs: [], // This will hold
     singleJob: null, // This will hold the job details when a user clicks on a job
+    searchJobByText: "",
   },
   reducers: {
     //actions
@@ -14,8 +16,15 @@ const jobSlice = createSlice({
     setSingleJob(state, action) {
       state.singleJob = action.payload; // Update state with fetched job details
     },
+    setAllAdminJobs(state, action) {
+      state.allAdminJobs = action.payload || []; // Update state with fetched admin jobs
+    },
+    setSearchJobByText(state, action) {
+      state.searchJobByText = action.payload;
+    },
   },
 });
 
-export const { setAllJobs, setSingleJob } = jobSlice.actions;
+export const { setAllJobs, setSingleJob, setAllAdminJobs, setSearchJobByText } =
+  jobSlice.actions;
 export default jobSlice.reducer;

@@ -8,34 +8,42 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Avatar, AvatarImage } from "../ui/avatar";
+
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Edit2, MoreHorizontal } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const CompaniesTable = () => {
+const AdminJobsTable = () => {
   const { companies, searchCompanyByText } = useSelector(
     (store) => store.company
   );
+  const { allAdminJobs, searchJobByText } = useSelector((store) => store.job);
   const navigate = useNavigate();
-  const [filterCompany, setFilterCompany] = useState(companies);
+
+  const [filterJobs, setFilterJobs] = useState([]);
 
   useEffect(() => {
-    const filteredCompany =
-      companies.length >= 0 &&
-      companies.filter((company) => {
-        if (!searchCompanyByText) {
-          return true;
-        }
-        return company.companyName
-          ?.toLowerCase()
-          .includes(searchCompanyByText.toLowerCase());
-      });
-    setFilterCompany(filteredCompany);
-  }, [companies, searchCompanyByText]);
+    if (!Array.isArray(allAdminJobs)) {
+      setFilterJobs([]);
+      return;
+    }
 
-  console.log("COMPANIES", companies);
+    const filtered = allAdminJobs.filter((job) => {
+      if (!searchJobByText) return true;
+
+      return (
+        job.title?.toLowerCase().includes(searchJobByText.toLowerCase()) ||
+        job?.company?.name
+          ?.toLowerCase()
+          .includes(searchJobByText.toLowerCase())
+      );
+    });
+
+    setFilterJobs(filtered);
+  }, [allAdminJobs, searchJobByText]);
+
+  console.log("COMPANIES", filterJobs);
   if (!companies) {
     return <div>Loading...</div>;
   }
@@ -43,32 +51,29 @@ const CompaniesTable = () => {
   return (
     <div>
       <Table>
-        <TableCaption>Your recent registered Companies</TableCaption>
+        <TableCaption>Your recent Posted Jobs</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Logo</TableHead>
             <TableHead>Company Name</TableHead>
+            <TableHead>Role</TableHead>
             <TableHead>Date</TableHead>
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {filterCompany.length === 0 ? (
-            <span>No Companies Added</span>
+          {filterJobs.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center">
+                No Job Added
+              </TableCell>
+            </TableRow>
           ) : (
-            filterCompany?.map((company) => (
-              <TableRow key={company.id}>
-                <TableCell>
-                  <Avatar>
-                    <AvatarImage
-                      src={company.logo || "default-logo-url"}
-                      alt={`${company.companyName} logo`}
-                    />
-                  </Avatar>
-                </TableCell>
-                <TableCell>{company.companyName}</TableCell>
-                <TableCell>{company.createdAt.split("T")[0]}</TableCell>
+            filterJobs.map((job) => (
+              <TableRow key={job._id}>
+                <TableCell>{job?.company?.name}</TableCell>
+                <TableCell>{job.title}</TableCell>
+                <TableCell>{job.createdAt?.split("T")[0]}</TableCell>
                 <TableCell className="text-right cursor-pointer">
                   <Popover>
                     <PopoverTrigger>
@@ -76,7 +81,7 @@ const CompaniesTable = () => {
                     </PopoverTrigger>
                     <PopoverContent className="w-32">
                       <div
-                        onClick={() => navigate(`/admin/companies/${company._id}`)}
+                        onClick={() => navigate(`/admin/companies/${job._id}`)}
                         className="flex items-center gap-2 w-fit cursor-pointer"
                       >
                         <Edit2 className="w-4" />
@@ -94,4 +99,4 @@ const CompaniesTable = () => {
   );
 };
 
-export default CompaniesTable;
+export default AdminJobsTable;
