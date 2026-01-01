@@ -23,27 +23,28 @@ const AdminJobsTable = () => {
 
   const [filterJobs, setFilterJobs] = useState([]);
 
-  useEffect(() => {
-    if (!Array.isArray(allAdminJobs)) {
-      setFilterJobs([]);
-      return;
-    }
+ useEffect(() => {
+  // Guard: ensure array
+  if (!Array.isArray(allAdminJobs)) {
+    setFilterJobs([]);
+    return;
+  }
 
-    const filtered = allAdminJobs.filter((job) => {
-      if (!searchJobByText) return true;
+  const filteredJobs = allAdminJobs.filter((job) => {
+    if (!searchJobByText) return true;
 
-      return (
-        job.title?.toLowerCase().includes(searchJobByText.toLowerCase()) ||
-        job?.company?.name
-          ?.toLowerCase()
-          .includes(searchJobByText.toLowerCase())
-      );
-    });
+    return (
+      job?.title?.toLowerCase().includes(searchJobByText.toLowerCase()) ||
+      job?.company?.companyName
+        ?.toLowerCase()
+        .includes(searchJobByText.toLowerCase())
+    );
+  });
 
-    setFilterJobs(filtered);
-  }, [allAdminJobs, searchJobByText]);
+  setFilterJobs(filteredJobs);
+}, [allAdminJobs, searchJobByText]);
 
-  console.log("COMPANIES", filterJobs);
+  console.log("COMPANIES", companies);
   if (!companies) {
     return <div>Loading...</div>;
   }
@@ -61,39 +62,40 @@ const AdminJobsTable = () => {
           </TableRow>
         </TableHeader>
 
-        <TableBody>
-          {filterJobs.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={4} className="text-center">
-                No Job Added
-              </TableCell>
-            </TableRow>
-          ) : (
-            filterJobs.map((job) => (
-              <TableRow key={job._id}>
-                <TableCell>{job?.company?.name}</TableCell>
-                <TableCell>{job.title}</TableCell>
-                <TableCell>{job.createdAt?.split("T")[0]}</TableCell>
-                <TableCell className="text-right cursor-pointer">
-                  <Popover>
-                    <PopoverTrigger>
-                      <MoreHorizontal />
-                    </PopoverTrigger>
-                    <PopoverContent className="w-32">
-                      <div
-                        onClick={() => navigate(`/admin/companies/${job._id}`)}
-                        className="flex items-center gap-2 w-fit cursor-pointer"
-                      >
-                        <Edit2 className="w-4" />
-                        <span>Edit</span>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
+    <TableBody>
+  {filterJobs.length === 0 ? (
+    <TableRow>
+      <TableCell colSpan={4} className="text-center">
+        No Job Added
+      </TableCell>
+    </TableRow>
+  ) : (
+    filterJobs.map((job) => (
+      <TableRow key={job._id}>
+        <TableCell>{job?.company?.companyName}</TableCell>
+        <TableCell>{job?.title}</TableCell>
+        <TableCell>{job?.createdAt?.split("T")[0]}</TableCell>
+        <TableCell className="text-right cursor-pointer">
+          <Popover>
+            <PopoverTrigger>
+              <MoreHorizontal />
+            </PopoverTrigger>
+            <PopoverContent className="w-32">
+              <div
+                onClick={() => navigate(`/admin/companies/${job._id}`)}
+                className="flex items-center gap-2 w-fit cursor-pointer"
+              >
+                <Edit2 className="w-4" />
+                <span>Edit</span>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </TableCell>
+      </TableRow>
+    ))
+  )}
+</TableBody>
+
       </Table>
     </div>
   );

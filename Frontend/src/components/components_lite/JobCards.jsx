@@ -6,7 +6,7 @@ const JobCards = ({ job }) => {
   return (
     <div className="p-5 rounded-md shadow-xl bg-white  border border-gray-200 cursor-pointer hover:shadow-2xl hover:shadow-blue-200 hover:p-3 ">
       <div>
-        <h1 className="text-lg font-medium">{job.company}</h1>
+        <h1 className="text-lg font-medium">{job.name}</h1>
         <p className="text-sm text-gray-600">India</p>
       </div>
       <div>
@@ -15,7 +15,7 @@ const JobCards = ({ job }) => {
       </div>
       <div className=" flex gap-2 items-center mt-4 ">
         <Badge className={" text-blue-600 font-bold"} variant={"ghost"}>
-          {job.position}
+          {job.position} Open Positions
         </Badge>
         <Badge className={" text-[#FA4F09] font-bold"} variant={"ghost"}>
           {job.salary}LPA{" "}
