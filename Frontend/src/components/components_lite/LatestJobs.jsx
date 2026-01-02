@@ -3,7 +3,7 @@ import JobCards from "./JobCards";
 import { useSelector } from "react-redux";
 
 const LatestJobs = () => {
-  const allJobs = useSelector((state) => state.jobs?.allJobs || []);
+  const allJobs = useSelector((state) => state.job?.allJobs || []);
   return (
     <div className="max-w-7xl mx-auto my-20">
       <h2 className="text-4xl font-bold   ">

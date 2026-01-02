@@ -1,8 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
-import jobSlice from "./jobSlice";
 import jobReducer from "./jobSlice";
-import { companySlice } from "./companySlice";
 import companyReducer from "./companySlice";
 import applicationSlice from "./applicationSlice";
 
@@ -26,9 +24,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  job: jobSlice,
-  jobs: jobReducer,
-  company: companySlice,
+  job: jobReducer,
   company: companyReducer,
   application: applicationSlice,
 });
@@ -45,4 +41,6 @@ const store = configureStore({
     }),
 });
 
+export const persistor = persistStore(store);
+persistor.purge(); // 🔥 clears old redux data
 export default store;

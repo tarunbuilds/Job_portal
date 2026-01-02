@@ -15,35 +15,29 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const CompaniesTable = () => {
-  const { companies, searchCompanyByText } = useSelector(
+  const { companies = [], searchCompanyByText } = useSelector(
     (store) => store.company
   );
+
   const navigate = useNavigate();
-  const [filterCompany, setFilterCompany] = useState(companies);
+  const [filterCompany, setFilterCompany] = useState([]);
 
   useEffect(() => {
-    const filteredCompany =
-      companies.length >= 0 &&
-      companies.filter((company) => {
-        if (!searchCompanyByText) {
-          return true;
-        }
-        return company.companyName
-          ?.toLowerCase()
-          .includes(searchCompanyByText.toLowerCase());
-      });
-    setFilterCompany(filteredCompany);
-  }, [companies, searchCompanyByText]);
+    const filtered = companies.filter((company) => {
+      if (!searchCompanyByText) return true;
+      return company.companyName
+        ?.toLowerCase()
+        .includes(searchCompanyByText.toLowerCase());
+    });
 
-  console.log("COMPANIES", companies);
-  if (!companies) {
-    return <div>Loading...</div>;
-  }
+    setFilterCompany(filtered);
+  }, [companies, searchCompanyByText]);
 
   return (
     <div>
       <Table>
         <TableCaption>Your recent registered Companies</TableCaption>
+
         <TableHeader>
           <TableRow>
             <TableHead>Logo</TableHead>
@@ -55,29 +49,39 @@ const CompaniesTable = () => {
 
         <TableBody>
           {filterCompany.length === 0 ? (
-            <span>No Companies Added</span>
+            <TableRow>
+              <TableCell colSpan={4} className="text-center">
+                No Companies Added
+              </TableCell>
+            </TableRow>
           ) : (
-            filterCompany?.map((company) => (
-              <TableRow key={company.id}>
+            filterCompany.map((company) => (
+              <TableRow key={company._id}>
                 <TableCell>
                   <Avatar>
                     <AvatarImage
-                      src={company.logo || "default-logo-url"}
-                      alt={`${company.companyName} logo`}
+                      src={company.logo || "/default-logo.png"}
+                      alt={company.companyName}
                     />
                   </Avatar>
                 </TableCell>
+
                 <TableCell>{company.companyName}</TableCell>
-                <TableCell>{company.createdAt.split("T")[0]}</TableCell>
-                <TableCell className="text-right cursor-pointer">
+                <TableCell>
+                  {company.createdAt?.split("T")[0]}
+                </TableCell>
+
+                <TableCell className="text-right">
                   <Popover>
                     <PopoverTrigger>
-                      <MoreHorizontal />
+                      <MoreHorizontal className="cursor-pointer" />
                     </PopoverTrigger>
                     <PopoverContent className="w-32">
                       <div
-                        onClick={() => navigate(`/admin/companies/${company._id}`)}
-                        className="flex items-center gap-2 w-fit cursor-pointer"
+                        onClick={() =>
+                          navigate(`/admin/companies/${company._id}`)
+                        }
+                        className="flex items-center gap-2 cursor-pointer"
                       >
                         <Edit2 className="w-4" />
                         <span>Edit</span>
@@ -93,5 +97,4 @@ const CompaniesTable = () => {
     </div>
   );
 };
-
 export default CompaniesTable;

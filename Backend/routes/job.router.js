@@ -5,8 +5,8 @@ import authenticateToken from "../middleware/isAuthenticated.js";
 const router = express.Router();
 
 router.post("/post", authenticateToken, postJob);
-router.get("/get",authenticateToken, getAllJobs);
+router.get("/get", getAllJobs);
 router.get("/getadminjobs", authenticateToken,getAdminJobs)
-router.get("/get/:id", authenticateToken,getJobById);
+router.get("/get/:id",getJobById);
 
 export default router;
