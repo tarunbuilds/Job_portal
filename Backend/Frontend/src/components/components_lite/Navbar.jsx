@@ -40,10 +40,17 @@ const Navbar = () => {
     <div className="bg-white">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
         <div>
-          <h1 className="text-2xl font-bold">
-            <span className="text-[#6B3AC2]"> Job </span>{" "}
-            <span className="text-[#FA4F09]">Portal</span>
-          </h1>
+          <Link to={"/"} className="flex items-center gap-2">
+            <img
+              src="https://img.freepik.com/premium-vector/abstract-people-tie-job-portal-logo_497289-825.jpg"
+              alt="Job Portal"
+              className="w-16 h-16 object-contain rounded-full"
+            />
+            <h1 className="text-2xl font-bold">
+              <span className="text-[#6B3AC2]">Job</span>{" "}
+              <span className="text-[#FA4F09]">Portal</span>
+            </h1>
+          </Link>
         </div>
         <div className="flex items-center gap-10">
           <ul className="flex font-medium items-center gap-6">
